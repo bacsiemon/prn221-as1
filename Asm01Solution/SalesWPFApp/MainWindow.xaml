@@ -1,0 +1,17 @@
+﻿<Window x:Class="SalesWPFApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SalesWPFApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid RenderTransformOrigin="0.499,0.481">
+        <Button x:Name="Btn_Login" Content="Log In" HorizontalAlignment="Left" Margin="281,277,0,0" VerticalAlignment="Top" Width="73" Click="Btn_Login_Click"/>
+        <Label Content="Email" HorizontalAlignment="Left" Margin="194,158,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="180,212,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="Txt_Email" HorizontalAlignment="Left" Margin="280,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="186" Height="26" FontSize="16" TextChanged="Txt_Email_TextChanged"/>
+        <PasswordBox x:Name="Txt_Password" HorizontalAlignment="Left" Margin="281,217,0,0" VerticalAlignment="Top" Width="185" Height="26" FontSize="16"/>
+
+    </Grid>
+</Window>
