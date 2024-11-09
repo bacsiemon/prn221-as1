@@ -29,6 +29,8 @@
             <Label Content="Company" HorizontalAlignment="Left" Margin="82,132,0,0" VerticalAlignment="Top"/>
             <Button x:Name="Btn_ProductManagePage" Content="Product" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="88" Click="Btn_ProductManagePage_Click"/>
             <DataGrid x:Name="Dg_Member" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="82,205,82,54" SelectionChanged="Dg_Member_SelectionChanged" />
+            <Button x:Name="Btn_OrderManagePage" Content="Order" HorizontalAlignment="Left" Margin="112,3,0,0" VerticalAlignment="Top" Width="88" Click="Btn_OrderManagePage_Click"/>
+            <Button x:Name="Btn_LogOut" Content="Log Out" HorizontalAlignment="Left" Margin="710,3,0,0" VerticalAlignment="Top" Width="80" Click="Btn_LogOut_Click"/>
 
         </Grid>
         <Button x:Name="Btn_Create" Content="Create" HorizontalAlignment="Left" Margin="130,447,0,0" VerticalAlignment="Top" Height="33" Width="91" Click="Btn_Create_Click"/>

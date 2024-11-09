@@ -2,6 +2,7 @@
 using Repositories.Repos;
 using Repositories.Repos.Interfaces;
 using SalesWPFApp.MemberManager;
+using SalesWPFApp.OrderManager;
 using SalesWPFApp.ProductManager;
 using System;
 using System.Collections.Generic;
@@ -25,15 +26,35 @@ namespace SalesWPFApp
     public partial class ProductManagePage : Window
 	{
 		private IProductRepository _productRepository;
+		private Member _loggedInMember;
+
 		public ProductManagePage()
 		{
 			InitializeComponent();
 			if (_productRepository == null) _productRepository = new ProductRepository();
 			RefreshDataGrid();
 			this.Title = "Product Manager";
-
+			
 
 		}
+
+
+		public ProductManagePage( Member loggedInMember)
+		{
+			InitializeComponent();
+			if (_productRepository == null) _productRepository = new ProductRepository();
+			RefreshDataGrid();
+			this.Title = "Product Manager";
+			_loggedInMember = loggedInMember;
+			if (!_loggedInMember.IsAdmin) DisableAdminButtons();
+		}
+
+		public void DisableAdminButtons()
+		{
+			Btn_MemberManagePage.IsEnabled = false;
+		}
+
+
 		#region product
 		public void RefreshDataGrid()
 		{
@@ -166,7 +187,22 @@ namespace SalesWPFApp
 
 		private void Btn_MemberManagePage_Click(object sender, RoutedEventArgs e)
 		{
-			MemberManagePage page = new();
+			MemberManagePage page = new(_loggedInMember);
+			page.Show();
+			this.Close();
+		}
+
+
+		private void Btn_OrderManagePage_Click(object sender, RoutedEventArgs e)
+		{
+			OrderManagePage page = new(_loggedInMember);
+			page.Show();
+			this.Close();
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			MainWindow page = new();
 			page.Show();
 			this.Close();
 		}

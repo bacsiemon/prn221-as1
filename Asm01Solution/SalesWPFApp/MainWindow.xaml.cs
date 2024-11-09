@@ -42,20 +42,9 @@ namespace SalesWPFApp
 				return;
 			}
 
-			if (!result.IsAdmin)
-			{
-				MessageBox.Show("You do not have access to this function!", "Unauthorized", MessageBoxButton.OK, MessageBoxImage.Error);
-				return;
-			}
-
-			ProductManagePage page = new();
+			ProductManagePage page = new(result);
 			page.Show();
-			this.Hide();
 			this.Close();
-
-			
-
-			
 		}
 
 		private void Txt_Email_TextChanged(object sender, TextChangedEventArgs e)

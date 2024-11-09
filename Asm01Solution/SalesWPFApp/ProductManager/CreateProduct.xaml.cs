@@ -54,42 +54,11 @@ namespace SalesWPFApp.ProductManager
 			}
 		}
 
-
-
 		private void Btn_Confirm_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
-				if (Txt_CategoryId.Text.Length == 0)
-				{
-					MessageBox.Show("Category ID is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
-
-				if (Txt_ProductName.Text.Length == 0 || Txt_ProductName.Text.Length > 40)
-				{
-					MessageBox.Show("Product Name must be between 1-40 characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-
-				}
-
-				if (Txt_Weight.Text.Length == 0 || Txt_Weight.Text.Length > 20)
-				{
-					MessageBox.Show("Weight must be between 1-20 characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
-
-				if (int.Parse(Txt_UnitPrice.Text) <= 0)
-				{
-					MessageBox.Show("Unit Price must be larger than 0", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
-
-				if (int.Parse(Txt_UnitsInStock.Text) < 0)
-				{
-					MessageBox.Show("Unit Price must be at least 0", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
+				if (!ValidateField()) return;
 
 				bool result = false;
 
@@ -133,7 +102,40 @@ namespace SalesWPFApp.ProductManager
         }
 
 
+		private bool ValidateField()
+		{
+			if (Txt_CategoryId.Text.Length == 0)
+			{
+				MessageBox.Show("Category ID is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
 
+			if (Txt_ProductName.Text.Length == 0 || Txt_ProductName.Text.Length > 40)
+			{
+				MessageBox.Show("Product Name must be between 1-40 characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+
+			}
+
+			if (Txt_Weight.Text.Length == 0 || Txt_Weight.Text.Length > 20)
+			{
+				MessageBox.Show("Weight must be between 1-20 characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+
+			if (int.Parse(Txt_UnitPrice.Text) <= 0)
+			{
+				MessageBox.Show("Unit Price must be larger than 0", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+
+			if (int.Parse(Txt_UnitsInStock.Text) < 0)
+			{
+				MessageBox.Show("Unit Price must be at least 0", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+			return true;
+		}
 
 
 		private void Txt_CategoryId_TextChanged(object sender, TextChangedEventArgs e)

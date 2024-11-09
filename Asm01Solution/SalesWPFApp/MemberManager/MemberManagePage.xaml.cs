@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Repositories.Repos;
 using Repositories.Repos.Interfaces;
+using SalesWPFApp.OrderManager;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
@@ -26,8 +28,9 @@ namespace SalesWPFApp.MemberManager
     {
 		private IMemberRepository _memberRepository;
 		private List<Member> _members;
+		private Member _loggedInMember;
 
-        public MemberManagePage()
+		public MemberManagePage()
         {
 			if (_memberRepository == null) _memberRepository = new MemberRepository();
             InitializeComponent();
@@ -35,11 +38,23 @@ namespace SalesWPFApp.MemberManager
 			RefreshDataGrid();
         }
 
+		public MemberManagePage( Member loggedInMember)
+		{
+			if (_memberRepository == null) _memberRepository = new MemberRepository();
+			InitializeComponent();
+			this.Title = "Member Manager";
+			RefreshDataGrid();
+			_loggedInMember = loggedInMember;
+		}
+
+
+
+
 		public void RefreshDataGrid()
 		{
 			_members = _memberRepository.GetAll();
 
-			Dg_Member.ItemsSource = _members.Select(m => new Member()
+			Dg_Member.ItemsSource = _members.Select(m => new Member
 			{
 				MemberId = m.MemberId,
 				Email = m.Email,
@@ -91,7 +106,12 @@ namespace SalesWPFApp.MemberManager
 			if (selected == null)
 			{
 				MessageBox.Show("An error has occured.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
 
+			if (selected.MemberId == _loggedInMember.MemberId)
+			{
+				MessageBox.Show("This Member is currently logged in. Cannot delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				return;
 			}
 
@@ -112,7 +132,7 @@ namespace SalesWPFApp.MemberManager
 
 		private void Btn_Update_Click(object sender, RoutedEventArgs e)
 		{
-			if (!ValidateField()) return;
+			if (!ValidateField(true)) return;
 
 			MessageBoxResult popup = MessageBox.Show($"Update the member ID {Txt_Id.Text} using the credentials above?", "Update Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -140,13 +160,29 @@ namespace SalesWPFApp.MemberManager
 		}
 
 
-		private bool ValidateField()
+		private bool ValidateField(bool isUpdate)
 		{
 			if (Txt_Email.Text.Length < 1 || Txt_Email.Text.Length>100)
 			{
 				MessageBox.Show("Email must be between 1-100 characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				return false;
 			}
+
+			if (!new EmailAddressAttribute().IsValid(Txt_Email.Text))
+			{
+				MessageBox.Show("Invalid Email Format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+
+			if (!isUpdate) 
+			{
+				if (_memberRepository.Get(Txt_Email.Text) != null)
+				{
+					MessageBox.Show("Email already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					return false;
+				}
+			}
+
 
 			if (Txt_CompanyName.Text.Length < 1 || Txt_CompanyName.Text.Length > 40)
 			{
@@ -176,7 +212,7 @@ namespace SalesWPFApp.MemberManager
 
 		private void Btn_Create_Click(object sender, RoutedEventArgs e)
 		{
-			if (!ValidateField()) return;
+			if (!ValidateField(false)) return;
 
 			MessageBoxResult popup = MessageBox.Show("Do you want to create a new member using the credentials above?", "Create Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -204,8 +240,22 @@ namespace SalesWPFApp.MemberManager
 
 		private void Btn_ProductManagePage_Click(object sender, RoutedEventArgs e)
 		{
-			ProductManagePage page = new ProductManagePage();
+			ProductManagePage page = new ProductManagePage(_loggedInMember);
 			page.Show();
+			this.Close();
+		}
+
+		private void Btn_OrderManagePage_Click(object sender, RoutedEventArgs e)
+		{
+			OrderManagePage page = new OrderManagePage(_loggedInMember) ;
+			page.Show();
+			this.Close();
+		}
+
+		private void Btn_LogOut_Click(object sender, RoutedEventArgs e)
+		{
+			MainWindow window = new MainWindow();	
+			window.Show();
 			this.Close();
 		}
 	}
